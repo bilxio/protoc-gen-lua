@@ -689,6 +689,10 @@ local function _AddMergeFromStringMethod(message_descriptor, message_meta)
     message_meta._member._InternalParse = _internal_parse 
 
     local merge_from_string = function(self, serialized)
+        -- NOTE 此处修改为了对 `serialized` 的 nil 情况做兼容 2018-01-26 ZD
+        if not serialized then
+            return 0
+        end
         local length = #serialized
         if _internal_parse(self, serialized, 0, length) ~= length then
             error('Unexpected end-group tag.')
